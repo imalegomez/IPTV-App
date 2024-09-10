@@ -1,11 +1,30 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, ActivityIndicator } from 'react-native';
+import VideoPlayer from './components/videoPlayer'; // Importa el componente VideoPlayer
+import ChannelList from './components/channelList';  // Importa el componente ChannelList
+
 
 export default function App() {
+  //const [loading, setLoading] = useState(false); // Estado para controlar la carga
+  const [selectedChannel, setSelectedChannel] = useState(null); // Estado para el canal seleccionado
+
+  // Función para manejar la selección de un canal
+  const handleSelectChannel = (channel) => {
+    setSelectedChannel(channel); // Establecer el canal seleccionado
+  };
+
+  // Función para salir del video y volver a la lista
+  const handleExitVideo = () => {
+    setSelectedChannel(null); // Restablecer el canal seleccionado
+  };
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      {selectedChannel ? (
+        <VideoPlayer selectedChannel={selectedChannel} onExitVideo={handleExitVideo} />
+      ) : (
+          <ChannelList onSelectChannel={handleSelectChannel}/>
+      )}
     </View>
   );
 }
@@ -13,8 +32,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#000',
   },
 });
