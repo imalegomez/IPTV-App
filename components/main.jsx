@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import VideoPlayer from './videoPlayer';
 import ChannelList from './channelList';
+import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { View, ScrollView } from 'react-native'; // Cambiar a 'react-native' en lugar de 'react-native-web'
+import { View } from 'react-native'; // Cambiar a 'react-native' en lugar de 'react-native-web'
 
 export function Main() {
   const [selectedChannel, setSelectedChannel] = useState(null); // Estado para el canal seleccionado
@@ -23,7 +24,10 @@ export function Main() {
       {selectedChannel ? (
         <VideoPlayer selectedChannel={selectedChannel} onExitVideo={handleExitVideo} />
       ) : (
-        <ChannelList onSelectChannel={handleSelectChannel} />
+        <>
+          <StatusBar style='light'/>
+          <ChannelList onSelectChannel={handleSelectChannel} />
+        </>
       )}
     </View>
   );

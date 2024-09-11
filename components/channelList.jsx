@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, FlatList, Pressable, Image, ActivityIndicator, StyleSheet, Button, ScrollView, Platform } from 'react-native';
+import { Link } from 'expo-router';
+import { View, Text, FlatList, Pressable, Image, ActivityIndicator, StyleSheet, ScrollView, Platform } from 'react-native';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 const ChannelList = ({ onSelectChannel }) => {
   const [channels, setChannels] = useState({});
@@ -63,12 +65,14 @@ const ChannelList = ({ onSelectChannel }) => {
   };
 
   const renderChannel = (channel) => (
+    <Link href={{pathname: '/channel', params: {url: channel.url, title: channel.title}}} asChild>
     <Pressable onPress={() => onSelectChannel(channel)} style={styles.itemContainer}>
       {channel.logo && (
         <Image source={{ uri: channel.logo }} style={styles.logo} resizeMode='contain' />
       )}
       <Text style={styles.channel}>{channel.title}</Text>
     </Pressable>
+    </Link>
   );
 
   const handleScrollLeft = (category) => {
@@ -104,7 +108,7 @@ const ChannelList = ({ onSelectChannel }) => {
             {/* Mostrar los botones solo en la web */}
             {Platform.OS === 'web' && (
               <Pressable onPress={() => handleScrollLeft(category)} style={styles.scrollButton}>
-                <Text style={styles.buttonText}>⟵</Text>
+                <AntDesign name="leftcircleo" size={24} color="white" />
               </Pressable>
             )}
   
@@ -124,7 +128,7 @@ const ChannelList = ({ onSelectChannel }) => {
             {/* Mostrar los botones solo en la web */}
             {Platform.OS === 'web' && (
               <Pressable onPress={() => handleScrollRight(category)} style={styles.scrollButton}>
-                <Text style={styles.buttonText}>⟶</Text>
+                <AntDesign name="rightcircleo" size={24} color="white" />
               </Pressable>
             )}
           </View>
@@ -176,7 +180,6 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'blue',
   },
 
   itemContainer: {
