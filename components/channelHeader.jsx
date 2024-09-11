@@ -24,7 +24,7 @@ const ChannelHeader = ({ title }) => {
 const styles = StyleSheet.create({
     headerContainer: {
         padding: 20,
-        backgroundColor:'rgba(192,192,192, 0.3)',
+        backgroundColor:'transparent',
         position: 'absolute',
         flexDirection: 'row',
         alignItems: 'center',

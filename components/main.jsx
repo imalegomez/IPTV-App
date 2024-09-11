@@ -3,24 +3,24 @@ import VideoPlayer from './videoPlayer';
 import ChannelList from './channelList';
 import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { View } from 'react-native'; // Cambiar a 'react-native' en lugar de 'react-native-web'
+import { View } from 'react-native';
+import MainHeader from './mainHeader'; // Importa el encabezado principal
 
 export function Main() {
-  const [selectedChannel, setSelectedChannel] = useState(null); // Estado para el canal seleccionado
+  const [selectedChannel, setSelectedChannel] = useState(null);
   const insets = useSafeAreaInsets();
 
-  // Función para manejar la selección de un canal
   const handleSelectChannel = (channel) => {
-    setSelectedChannel(channel); // Establecer el canal seleccionado
+    setSelectedChannel(channel);
   };
 
-  // Función para salir del video y volver a la lista
   const handleExitVideo = () => {
-    setSelectedChannel(null); // Restablecer el canal seleccionado
+    setSelectedChannel(null);
   };
 
   return (
-    <View style={{ paddingTop: insets.top, paddingBottom: insets.bottom, flex: 1}}>
+    <View style={{ paddingTop: insets.top, paddingBottom: insets.bottom, flex: 1 }}>
+      {!selectedChannel && <MainHeader />} 
       {selectedChannel ? (
         <VideoPlayer selectedChannel={selectedChannel} onExitVideo={handleExitVideo} />
       ) : (
