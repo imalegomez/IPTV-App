@@ -3,8 +3,9 @@ import VideoPlayer from './videoPlayer';
 import ChannelList from './channelList';
 import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import MainHeader from './mainHeader'; // Importa el encabezado principal
+import BottomNav from './bottomNav';
 
 export function Main() {
   const [selectedChannel, setSelectedChannel] = useState(null);
@@ -25,10 +26,11 @@ export function Main() {
         <VideoPlayer selectedChannel={selectedChannel} onExitVideo={handleExitVideo} />
       ) : (
         <>
-          <StatusBar style='light'/>
+          <StatusBar style='light' />
           <ChannelList onSelectChannel={handleSelectChannel} />
         </>
       )}
+      {Platform.OS === 'android' || Platform.OS === 'ios' ? <BottomNav/> : null}
     </View>
   );
 }

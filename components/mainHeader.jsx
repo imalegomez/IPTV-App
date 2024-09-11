@@ -1,29 +1,30 @@
-// MainHeader.js
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React from "react";
+import { View, Text, StyleSheet } from "react-native";
 
 
-const MainHeader = () => {
-  return (
-    <View style={styles.headerContainer}>
-      <Text style={styles.headerText}>Mi Aplicación</Text>
-    </View>
-  );
-};
+const MainHeader = () =>{
+    return(
+        <View style={styles.headerContainer}>
+            <Text style={styles.headerText}>D'sol TV</Text>
+        </View>
+    )
+}
 
 const styles = StyleSheet.create({
-  headerContainer: {
-    backgroundColor: '#333', // Color de fondo del encabezado
-    padding: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    overflow: 'hidden', // Evita que se muestren elementos fuera de su área
-  },
-  headerText: {
-    color: '#fff',
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-});
+    headerContainer: {
+        backgroundColor: 'rgba(51, 51, 51, 0.8)', // Color de fondo con transparencia
+        padding: 20,
+        alignItems: 'center',
+        overflow: 'hidden',
+        flexDirection: 'row'
+      },
+      headerText: {
+        color: '#fff',
+        fontSize: 20,
+        fontWeight: 'bold',
+        position: 'absolute',
+        left: 10
+      },
+})
 
-export default MainHeader;
+export default React.memo(MainHeader)
