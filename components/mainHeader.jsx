@@ -16,7 +16,8 @@ const styles = StyleSheet.create({
         padding: 20,
         alignItems: 'center',
         overflow: 'hidden',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        height: 80,
       },
       headerText: {
         color: '#fff',
