@@ -139,7 +139,7 @@ const ChannelList = ({ onSelectChannel }) => {
   return (
     <View style={styles.container}>
       {loading ? (
-        <ActivityIndicator size="large" color="#00ff00" />
+        <ActivityIndicator size="large" color="#00ff00" style={{alignItems:'center', justifyContent:'center', flex:1}}/>
       ) : error ? (
         <Text style={styles.errorText}>{error}</Text>
       ) : (

@@ -8,7 +8,7 @@ const ChannelHeader = ({ title }) => {
     const router = useRouter();
 
     const handleBackPress = () => {
-        router.push('/'); // Cambia a la ruta del índice
+        router.back(); // Cambia a la ruta del índice
     };
 
     return (

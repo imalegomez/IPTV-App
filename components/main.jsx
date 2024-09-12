@@ -19,9 +19,11 @@ export function Main() {
     setSelectedChannel(null);
   };
 
+
+
   return (
     <View style={{ paddingTop: insets.top, paddingBottom: insets.bottom, flex: 1 }}>
-      {!selectedChannel && <MainHeader />} 
+      {!selectedChannel && <MainHeader/>} 
       {selectedChannel ? (
         <VideoPlayer selectedChannel={selectedChannel} onExitVideo={handleExitVideo} />
       ) : (
