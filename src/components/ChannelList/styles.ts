@@ -1,9 +1,10 @@
 import { StyleSheet } from "react-native";
+import { colors } from "../../constans/Colors";
 
 export default StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: "#000",
+      backgroundColor: colors.black,
     },
     categoryContainer: {
       marginBottom: 20,
@@ -31,7 +32,7 @@ export default StyleSheet.create({
       justifyContent: "center",
       marginRight: 10,
       padding: 10,
-      backgroundColor: "#333",
+      backgroundColor: colors.grayCustom,
       borderRadius: 5,
       width: 100,
     },
@@ -41,18 +42,18 @@ export default StyleSheet.create({
       borderRadius: 5,
     },
     channel: {
-      color: "#fff",
+      color: colors.white,
       fontSize: 16,
       textAlign: "center",
     },
     categoryTitle: {
-      color: "#fff",
+      color: colors.white,
       fontSize: 20,
       marginVertical: 10,
       fontWeight: "bold",
     },
     errorText: {
-      color: "red",
+      color: colors.red,
       textAlign: "center",
       margin: 20,
     },

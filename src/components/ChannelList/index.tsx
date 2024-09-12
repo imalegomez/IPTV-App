@@ -13,6 +13,7 @@ import {
 import AntDesign from "@expo/vector-icons/AntDesign";
 import styles from "./styles";
 import { Channel } from "../../types/Channel";
+import { colors } from "../../constans/Colors";
 
 export interface ChannelListProps {
   onSelectChannel: (channel: Channel) => void;
@@ -142,7 +143,7 @@ export const ChannelList: FC<ChannelListProps> = React.memo(
                 onPress={() => handleScrollLeft(category)}
                 style={styles.scrollButton}
               >
-                <AntDesign name="leftcircleo" size={24} color="white" />
+                <AntDesign name="leftcircleo" size={24} color={colors.white} />
               </Pressable>
             )}
 
@@ -165,7 +166,7 @@ export const ChannelList: FC<ChannelListProps> = React.memo(
                 onPress={() => handleScrollRight(category)}
                 style={styles.scrollButton}
               >
-                <AntDesign name="rightcircleo" size={24} color="white" />
+                <AntDesign name="rightcircleo" size={24} color={colors.white} />
               </Pressable>
             )}
           </View>

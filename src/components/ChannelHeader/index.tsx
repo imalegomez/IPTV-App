@@ -4,6 +4,7 @@ import { View, Text, Pressable } from "react-native";
 import { useRouter } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import styles from "./styles";
+import { colors } from "../../constans/Colors";
 
 interface ChannelHeaderProps {
   title: string;
@@ -19,7 +20,7 @@ export const ChannelHeader: FC<ChannelHeaderProps> = React.memo(({ title }) => {
   return (
     <View style={styles.headerContainer}>
       <Pressable onPress={handleBackPress} style={styles.backButton}>
-        <AntDesign name="close" size={24} color="white" />
+        <AntDesign name="close" size={24} color={colors.white} />
       </Pressable>
       <Text style={styles.headerText}>Estás viendo: {title}</Text>
     </View>

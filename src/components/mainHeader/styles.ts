@@ -1,8 +1,9 @@
 import { StyleSheet } from "react-native";
+import { backgrounds } from "../../constans/Colors";
 
 export default StyleSheet.create({
     headerContainer: {
-      backgroundColor: "rgba(51, 51, 51, 0.8)", // Color de fondo con transparencia
+      backgroundColor: backgrounds.mainHeader, // Color de fondo con transparencia
       padding: 20,
       alignItems: "center",
       overflow: "hidden",
