@@ -50,7 +50,7 @@ const ChannelList = ({ onSelectChannel }) => {
           currentChannel = { title: cleanedTitle, logo: logoUrl };
 
           if (categoryMatch && categoryMatch[1]) {
-            currentCategory = categoryMatch[1].trim();
+            currentCategory = categoryMatch[1].split(';')[0].replace(/Undefined/, 'Otros').trim();
           }
         }
       } else if (line.startsWith('http')) {
@@ -72,8 +72,6 @@ const ChannelList = ({ onSelectChannel }) => {
     <Pressable 
       onPress={() => onSelectChannel(channel)} 
       style={styles.itemContainer}
-      onMouseEnter={() => setIsHoveredChannel(true)} 
-      onMouseLeave={() => setIsHoveredChannel(false)}
     >
       {channel.logo && (
         <Image source={{ uri: channel.logo }} style={Platform.OS === 'web' ? styles.logoWeb : styles.logo} resizeMode='contain' />
@@ -192,7 +190,7 @@ const styles = StyleSheet.create({
     borderColor: 'lightgray', // Borde gris solo en web
     width: 250, // Mantener el ancho fijo
     height: 150, // Asegurarte que el alto sea igual al ancho para que sea cuadrada
-    borderRadius: 10,
+    borderRadius: 8,
   },
   scrollButton: {
     width: 50,
@@ -226,8 +224,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   categoryTitle: {
+    flexDirection: 'row',
+    left: 20,
     color: '#000',
-    fontSize: 20,
+    fontSize: 25,
     marginVertical: 10,
     fontWeight: 'bold',
   },

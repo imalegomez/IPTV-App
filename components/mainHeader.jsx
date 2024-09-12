@@ -31,7 +31,7 @@ const MainHeader = () => {
               isHoveredHome && styles.navButtonHovered
             ]}
           >
-            <Feather name="home" size={24} color="white" />
+            <Feather name="home" size={20} color="white" />
             <Text style={styles.navText}>Home</Text>
           </Pressable>
           </Link>
@@ -43,7 +43,7 @@ const MainHeader = () => {
               isHoveredLiveTV && styles.navButtonHovered
             ]}
           >
-            <Feather name="tv" size={24} color="white" />
+            <Feather name="tv" size={20} color="white" />
             <Text style={styles.navText}>Live TV</Text>
           </Pressable>
         </View>
@@ -69,15 +69,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: 100
+    height: 75,
   },
   headerContainerWeb: {
-    backgroundColor: '#212121',
+    backgroundColor: '#000',
     padding: 20,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: 100,
+    height: 80,
   },
   leftContainer: {
     flexDirection: 'row',
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     marginRight: 30,
     marginLeft: 20,  // Espaciado entre los botones
     padding: 10,  // Agrega padding para aumentar la caja
-    transition: 'all 0.3s ease',  // Transición suave
+    transition: 'all 0.1s ease',  // Transición suave
     flexGrow: 1,
     borderRadius: 5,
   },
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   navButtonHovered: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
     borderRadius: 13,
     transform: 'scale(1.05)',
   },

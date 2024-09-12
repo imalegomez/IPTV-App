@@ -11,13 +11,13 @@ const BottomNav = () => {
   return (
     <View style={styles.navContainer}>
       <Pressable onPress={() => router.push('/')}>
-        <Feather name="home" size={24} color="white" />
+        <Feather name="home" style={styles.navItem}/>
       </Pressable>
       <Pressable onPress={() => router.push('/search')}>
-        <Feather name="compass" size={24} color="white" />
+        <Feather name="compass" style={styles.navItem} />
       </Pressable>
       <Pressable onPress={() => router.push('/bookmark')}>
-        <AntDesign name="book" size={24} color="white" />
+        <AntDesign name="book" style={styles.navItem}/>
       </Pressable>
     </View>
   );
@@ -29,10 +29,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     backgroundColor: '#333',
     paddingVertical: 10,
+    height: 55
   },
   navItem: {
+    flexDirection:'row',
     color: '#fff',
-    fontSize: 16,
+    fontSize: 30,
   },
 });
 
