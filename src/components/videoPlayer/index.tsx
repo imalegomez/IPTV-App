@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, FC } from "react";
-import { Platform, Pressable, View } from "react-native";
+import { Pressable, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Video, VideoFullscreenUpdate } from "expo-av";
 import * as ScreenOrientation from "expo-screen-orientation";
@@ -7,6 +7,7 @@ import Hls from "hls.js";
 import { ChannelHeader } from "../ChannelHeader";
 import styles from "./styles";
 import { Channel } from "../../types/Channel";
+import { isWeb } from "../../constans/Helpers";
 
 interface VideoPlayerProps {
   selectedChannel: Channel;
@@ -31,12 +32,12 @@ export const VideoPlayer: FC<VideoPlayerProps> = React.memo(
     };
 
     useEffect(() => {
-      if (Platform.OS === "web") {
+      if (isWeb) {
         window.addEventListener("mousemove", handleMouseMove);
       }
 
       return () => {
-        if (Platform.OS === "web") {
+        if (isWeb) {
           window.removeEventListener("mousemove", handleMouseMove);
           clearTimeout(hideHeaderTimeout.current);
         }
@@ -44,7 +45,7 @@ export const VideoPlayer: FC<VideoPlayerProps> = React.memo(
     }, []);
 
     useEffect(() => {
-      if (selectedChannel && Platform.OS === "web" && videoRef.current) {
+      if (selectedChannel && isWeb && videoRef.current) {
         if (Hls.isSupported()) {
           const hls = new Hls();
           hls.loadSource(selectedChannel.url);
@@ -57,7 +58,7 @@ export const VideoPlayer: FC<VideoPlayerProps> = React.memo(
       }
 
       const lockOrientation = async () => {
-        if (Platform.OS !== "web") {
+        if (isWeb) {
           await ScreenOrientation.lockAsync(
             ScreenOrientation.OrientationLock.LANDSCAPE
           );
@@ -67,7 +68,7 @@ export const VideoPlayer: FC<VideoPlayerProps> = React.memo(
 
       return () => {
         const unlockOrientation = async () => {
-          if (Platform.OS !== "web") {
+          if (isWeb) {
             await ScreenOrientation.lockAsync(
               ScreenOrientation.OrientationLock.PORTRAIT_UP
             );
@@ -104,7 +105,7 @@ export const VideoPlayer: FC<VideoPlayerProps> = React.memo(
           />
         )}
         <View style={styles.videoContainer}>
-          {Platform.OS === "web" ? (
+          {isWeb ? (
             <video ref={videoRef} style={styles.video} controls autoPlay />
           ) : (
             <>

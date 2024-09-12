@@ -8,12 +8,12 @@ import {
   Image,
   ActivityIndicator,
   ScrollView,
-  Platform,
 } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import styles from "./styles";
 import { Channel } from "../../types/Channel";
 import { colors } from "../../constans/Colors";
+import { isWeb } from "../../constans/Helpers";
 
 export interface ChannelListProps {
   onSelectChannel: (channel: Channel) => void;
@@ -108,7 +108,7 @@ export const ChannelList: FC<ChannelListProps> = React.memo(
     );
 
     const handleScrollLeft = (category) => {
-      if (Platform.OS === "web") {
+      if (isWeb) {
         if (scrollRefs.current[category]) {
           scrollRefs.current[category].scrollTo({
             x: Math.max(scrollRefs.current[category].scrollLeft - 200, 0),
@@ -119,7 +119,7 @@ export const ChannelList: FC<ChannelListProps> = React.memo(
     };
 
     const handleScrollRight = (category) => {
-      if (Platform.OS === "web") {
+      if (isWeb) {
         if (scrollRefs.current[category]) {
           scrollRefs.current[category].scrollTo({
             x: scrollRefs.current[category].scrollLeft + 200,
@@ -138,7 +138,7 @@ export const ChannelList: FC<ChannelListProps> = React.memo(
 
           <View style={styles.horizontalContainer}>
             {/* Mostrar los botones solo en la web */}
-            {Platform.OS === "web" && (
+            {isWeb && (
               <Pressable
                 onPress={() => handleScrollLeft(category)}
                 style={styles.scrollButton}
@@ -161,7 +161,7 @@ export const ChannelList: FC<ChannelListProps> = React.memo(
             </ScrollView>
 
             {/* Mostrar los botones solo en la web */}
-            {Platform.OS === "web" && (
+            {isWeb && (
               <Pressable
                 onPress={() => handleScrollRight(category)}
                 style={styles.scrollButton}

@@ -3,9 +3,10 @@ import { VideoPlayer } from "../videoPlayer";
 import { ChannelList } from "../ChannelList";
 import { StatusBar } from "expo-status-bar";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Platform, View } from "react-native";
+import { View } from "react-native";
 import { MainHeader } from "../mainHeader";
 import { BottomNav } from "../BottomNav";
+import { isAndroid, isIos } from "../../constans/Helpers";
 
 export const Main = () => {
   const [selectedChannel, setSelectedChannel] = useState(null);
@@ -35,9 +36,7 @@ export const Main = () => {
           <ChannelList onSelectChannel={handleSelectChannel} />
         </>
       )}
-      {Platform.OS === "android" || Platform.OS === "ios" ? (
-        <BottomNav />
-      ) : null}
+      {isAndroid || isIos ? <BottomNav /> : null}
     </View>
   );
 };
