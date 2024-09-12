@@ -4,10 +4,12 @@ import { View, Text, FlatList, Pressable, Image, ActivityIndicator, StyleSheet, 
 import AntDesign from '@expo/vector-icons/AntDesign';
 
 const ChannelList = ({ onSelectChannel }) => {
+  const [isHoveredChannel, setIsHoveredChannel] = useState(false);
   const [channels, setChannels] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const scrollRefs = useRef({}); // Almacena los refs para cada categoría
+
 
   useEffect(() => {
     const fetchM3U = async () => {
@@ -44,7 +46,8 @@ const ChannelList = ({ onSelectChannel }) => {
         const categoryMatch = line.match(/group-title="([^"]*)"/);
         if (match) {
           const [_, logoUrl, title] = match;
-          currentChannel = { title, logo: logoUrl };
+          const cleanedTitle = title.replace(/\s*\(.*?\)\s*|\s*\[.*?\]\s*/g, '').trim();
+          currentChannel = { title: cleanedTitle, logo: logoUrl };
 
           if (categoryMatch && categoryMatch[1]) {
             currentCategory = categoryMatch[1].trim();
@@ -66,9 +69,14 @@ const ChannelList = ({ onSelectChannel }) => {
 
   const renderChannel = (channel) => (
     <Link href={{pathname: '/channel', params: {url: channel.url, title: channel.title}}} asChild>
-    <Pressable onPress={() => onSelectChannel(channel)} style={styles.itemContainer}>
+    <Pressable 
+      onPress={() => onSelectChannel(channel)} 
+      style={styles.itemContainer}
+      onMouseEnter={() => setIsHoveredChannel(true)} 
+      onMouseLeave={() => setIsHoveredChannel(false)}
+    >
       {channel.logo && (
-        <Image source={{ uri: channel.logo }} style={styles.logo} resizeMode='contain' />
+        <Image source={{ uri: channel.logo }} style={Platform.OS === 'web' ? styles.logoWeb : styles.logo} resizeMode='contain' />
       )}
       <Text style={styles.channel}>{channel.title}</Text>
     </Pressable>
@@ -76,27 +84,28 @@ const ChannelList = ({ onSelectChannel }) => {
   );
 
   const handleScrollLeft = (category) => {
-    if(Platform.OS === 'web'){
-        if (scrollRefs.current[category]) {
-            scrollRefs.current[category].scrollTo({
-                x: Math.max(scrollRefs.current[category].scrollLeft - 200, 0),
-                animated: true,
-            });
-        }
+    if (Platform.OS === 'web') {
+      if (scrollRefs.current[category]) {
+        scrollRefs.current[category].scrollTo({
+          x: Math.max(scrollRefs.current[category].scrollLeft - 200, 0),
+          animated: true,
+        });
+      }
     }
-};
+  };
 
   const handleScrollRight = (category) => {
-    if(Platform.OS === 'web'){
-        if (scrollRefs.current[category]) {
-            scrollRefs.current[category].scrollTo({
-                x: scrollRefs.current[category].scrollLeft + 200,
-                animated: true,
-            });
-        }
+    if (Platform.OS === 'web') {
+      if (scrollRefs.current[category]) {
+        scrollRefs.current[category].scrollTo({
+          x: scrollRefs.current[category].scrollLeft + 200,
+          animated: true,
+        });
+      }
     }
-};
+  };
 
+  
   const renderCategory = ({ item: category }) => {
     const categoryChannels = channels[category] || [];
 
@@ -105,10 +114,9 @@ const ChannelList = ({ onSelectChannel }) => {
           <Text style={styles.categoryTitle}>{category}</Text>
   
           <View style={styles.horizontalContainer}>
-            {/* Mostrar los botones solo en la web */}
             {Platform.OS === 'web' && (
               <Pressable onPress={() => handleScrollLeft(category)} style={styles.scrollButton}>
-                <AntDesign name="leftcircleo" size={24} color="white" />
+                <AntDesign name="leftcircleo" size={24} color="black" />
               </Pressable>
             )}
   
@@ -119,16 +127,15 @@ const ChannelList = ({ onSelectChannel }) => {
               showsHorizontalScrollIndicator={false}
             >
               {categoryChannels.map((channel, index) => (
-                <View key={index} style={styles.channelWrapper}>
+                <View key={index} style={Platform.OS === 'web' ? styles.channelWrapperWeb : styles.channelWrapper}>
                   {renderChannel(channel)}
                 </View>
               ))}
             </ScrollView>
   
-            {/* Mostrar los botones solo en la web */}
             {Platform.OS === 'web' && (
               <Pressable onPress={() => handleScrollRight(category)} style={styles.scrollButton}>
-                <AntDesign name="rightcircleo" size={24} color="white" />
+                <AntDesign name="rightcircleo" size={24} color="black" />
               </Pressable>
             )}
           </View>
@@ -139,17 +146,19 @@ const ChannelList = ({ onSelectChannel }) => {
   return (
     <View style={styles.container}>
       {loading ? (
-        <ActivityIndicator size="large" color="#00ff00" style={{alignItems:'center', justifyContent:'center', flex:1}}/>
+        <ActivityIndicator size="large" color="#00ff00" style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }} />
       ) : error ? (
         <Text style={styles.errorText}>{error}</Text>
       ) : (
-        <FlatList
-          data={Object.keys(channels)} // Obtener categorías
-          keyExtractor={(item) => item}
-          renderItem={renderCategory}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.categoriesList}
-        />
+        <>
+            <FlatList
+              data={Object.keys(channels)}
+              keyExtractor={(item) => item}
+              renderItem={renderCategory}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={styles.categoriesList}
+            />          
+        </>
       )}
     </View>
   );
@@ -158,7 +167,7 @@ const ChannelList = ({ onSelectChannel }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: '#fff',
   },
   categoryContainer: {
     marginBottom: 20,
@@ -172,7 +181,18 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   channelWrapper: {
-    marginHorizontal: 10,
+    flex: 1,
+    margin: 10,
+  },
+  channelWrapperWeb: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    margin: 10, // Ajusta el margen según necesites
+    borderColor: 'lightgray', // Borde gris solo en web
+    width: 250, // Mantener el ancho fijo
+    height: 150, // Asegurarte que el alto sea igual al ancho para que sea cuadrada
+    borderRadius: 10,
   },
   scrollButton: {
     width: 50,
@@ -180,28 +200,33 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-
   itemContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 10,
     padding: 10,
-    backgroundColor: '#333',
     borderRadius: 5,
     width: 100,
   },
   logo: {
-    width: 70,
-    height: 70,
+    width: 40, // Tamaño más pequeño del logo
+    height: 40,
     borderRadius: 5,
+    marginBottom: 5, // Espacio entre el logo y el texto
+  },
+  logoWeb: {
+    width: 30,
+    height: 30,
+    borderRadius: 5,
+    marginBottom: 5, 
   },
   channel: {
-    color: '#fff',
-    fontSize: 16,
+    color: '#000',
+    fontSize: 14, // Ajusta el tamaño del texto si es necesario
     textAlign: 'center',
   },
   categoryTitle: {
-    color: '#fff',
+    color: '#000',
     fontSize: 20,
     marginVertical: 10,
     fontWeight: 'bold',
@@ -214,6 +239,12 @@ const styles = StyleSheet.create({
   categoriesList: {
     paddingBottom: 20,
   },
+  gridContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+  },
 });
+
 
 export default React.memo(ChannelList);

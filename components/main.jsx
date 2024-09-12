@@ -17,6 +17,7 @@ export function Main() {
 
   const handleExitVideo = () => {
     setSelectedChannel(null);
+    //<VideoPlayer selectedChannel={selectedChannel}/> para usar en la mainscreen
   };
 
 
@@ -28,11 +29,12 @@ export function Main() {
         <VideoPlayer selectedChannel={selectedChannel} onExitVideo={handleExitVideo} />
       ) : (
         <>
+          
           <StatusBar style='light' />
           <ChannelList onSelectChannel={handleSelectChannel} />
         </>
       )}
-      {Platform.OS === 'android' || Platform.OS === 'ios' ? <BottomNav/> : null}
+      {Platform.OS !== 'web'? <BottomNav/> : null}
     </View>
   );
 }
