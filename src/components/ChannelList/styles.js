@@ -45,8 +45,8 @@ export default StyleSheet.create({
       width: 100,
     },
     logo: {
-      width: 40, // Tamaño más pequeño del logo
-      height: 40,
+      width: 60, // Tamaño más pequeño del logo
+      height: 60,
       borderRadius: 5,
       marginBottom: 5, // Espacio entre el logo y el texto
     },
@@ -82,4 +82,7 @@ export default StyleSheet.create({
       flexWrap: 'wrap',
       justifyContent: 'center',
     },
+    buscador:{
+      
+    }
   });
