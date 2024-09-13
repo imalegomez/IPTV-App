@@ -1,17 +1,20 @@
-// Header.js
-import React from 'react';
+// ChannelHeader.js
+import React, {useCallback} from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import AntDesign from '@expo/vector-icons/AntDesign';
-
 import styles from './styles';
 
-const ChannelHeader = ({ title }) => {
+const ChannelHeader = ({ title, onExit }) => {
     const router = useRouter();
 
-    const handleBackPress = () => {
-        router.back(); // Cambia a la ruta del índice
-    };
+    const handleBackPress = useCallback(() => {
+        if (onExit) {
+            onExit(); // Llama a la función de salida
+        } else {
+            router.back(); // Cambia a la ruta del índice si no se proporciona onExit
+        }
+    }, []);
 
     return (
         <View style={styles.headerContainer}>
@@ -23,5 +26,4 @@ const ChannelHeader = ({ title }) => {
     );
 };
 
-
-export default React.memo(ChannelHeader)
+export default React.memo(ChannelHeader);

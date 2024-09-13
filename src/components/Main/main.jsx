@@ -1,53 +1,80 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import VideoPlayer from '../VideoPlayer/videoPlayer';
 import ChannelList from '../ChannelList/channelList';
 import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Platform, View } from 'react-native';
-import MainHeader from '../MainHeader/mainHeader'; // Importa el encabezado principal
+import { Platform, View, ActivityIndicator, Text } from 'react-native';
+import MainHeader from '../MainHeader/mainHeader';
 import BottomNav from '../BottomNav/bottomNav';
 import VideoPlayerMainScreen from '../VideoPlayerMainScreen/videoPlayerMainScreen';
+import { fetchChannels } from '../ChannelList/fetchChannels';
 
 export function Main() {
   const [selectedChannel, setSelectedChannel] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [channels, setChannels] = useState({});
+  const [error, setError] = useState(null);
   const insets = useSafeAreaInsets();
 
-  const handleSelectChannel = (channel) => {
-    setSelectedChannel(channel);
-  };
+  const loadChannels = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const channelData = await fetchChannels();
+      setChannels(channelData);
+    } catch (err) {
+      console.error('Error fetching channels:', err);
+      setError('Failed to load channels.');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
-  const handleExitVideo = () => {
+  useEffect(() => {
+    loadChannels();
+  }, [loadChannels]);
+
+  const handleSelectChannel = useCallback((channel) => {
+    setSelectedChannel(channel);
+  }, []);
+
+  const handleExitVideo = useCallback(() => {
     setSelectedChannel(null);
+  }, []);
+
+  const renderContent = () => {
+    if (loading) {
+      return <ActivityIndicator size="large" color="#fff" style={{ flex: 1 }} />;
+    }
+
+    if (error) {
+      return <Text style={{ color: 'white' }}>{error}</Text>;
+    }
+
+    if (Platform.OS === 'web') {
+      return (
+        <>
+          <MainHeader />
+          <VideoPlayerMainScreen selectedChannel={selectedChannel || { url: '', title: 'Default Video' }} />
+          <ChannelList channels={channels} onSelectChannel={handleSelectChannel} />
+        </>
+      );
+    }
+
+    return selectedChannel ? (
+      <VideoPlayer selectedChannel={selectedChannel} onExitVideo={handleExitVideo} />
+    ) : (
+      <>
+        <StatusBar style='light' />
+        <ChannelList channels={channels} onSelectChannel={handleSelectChannel} />
+      </>
+    );
   };
 
   return (
     <View style={{ paddingTop: insets.top, paddingBottom: insets.bottom, flex: 1 }}>
-      {Platform.OS !== 'web' && !selectedChannel && <MainHeader />}
-      {/* Mostrar siempre el VideoPlayerMainScreen en la versión web */}
-      {Platform.OS === 'web' ? (
-        <>
-          <MainHeader />
-          <VideoPlayerMainScreen selectedChannel={selectedChannel || { url: '', title: 'Default Video' }} />
-          <ChannelList onSelectChannel={handleSelectChannel} />
-        </>
-      ) : (
-        <>
-          {/* Mostrar VideoPlayer en móviles o tablets */}
-          {selectedChannel ? (
-            <VideoPlayer selectedChannel={selectedChannel} onExitVideo={handleExitVideo} />
-          ) : (
-            
-            <>
-              <StatusBar style='light' />
-              {/* Mostrar ChannelList cuando no hay canal seleccionado */}
-              <ChannelList onSelectChannel={handleSelectChannel} />
-            </>
-          )}
-        </>
-      )}
-
-      {/* Mostrar BottomNav solo en plataformas móviles */}
-      {Platform.OS !== 'web' ? <BottomNav /> : null}
+      {renderContent()}
+      {Platform.OS !== 'web' && !selectedChannel && <BottomNav />}
     </View>
   );
 }
