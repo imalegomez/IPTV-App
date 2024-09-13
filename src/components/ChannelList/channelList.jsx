@@ -170,19 +170,26 @@ const ChannelList = ({ onSelectChannel }) => {
   };
 
   return (
-    <View style={styles.container}>
+  
+    <View style={styles.container}>  
       {loading ? (
+        
         <ActivityIndicator size="large" color="#000" style={{ alignItems: 'center', justifyContent: 'center', flex: 1}} />
       ) : error ? (
         <Text style={styles.errorText}>{error}</Text>
       ) : (
         <>
+
+      <View style={styles.searchContainer}>
+        <AntDesign name="search1" size={20} color="black" style={styles.searchIcon} />
           <TextInput
             style={styles.searchInput}
             placeholder="Buscar canales..."
             value={searchText}
             onChangeText={setSearchText}
           />
+        
+      </View>
           <FlatList
             data={Object.keys(filteredChannels)}
             keyExtractor={(item) => item}
@@ -190,6 +197,7 @@ const ChannelList = ({ onSelectChannel }) => {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.categoriesList}
           />
+          
         </>
       )}
     </View>
