@@ -22,9 +22,7 @@ export function Main() {
 
   return (
     <View style={{ paddingTop: insets.top, paddingBottom: insets.bottom, flex: 1 }}>
-      {/* Mantener el encabezado solo cuando no haya un canal seleccionado */}
-      {!selectedChannel && <MainHeader />}
-
+      {Platform.OS !== 'web' && !selectedChannel && <MainHeader />}
       {/* Mostrar siempre el VideoPlayerMainScreen en la versión web */}
       {Platform.OS === 'web' ? (
         <>
@@ -38,6 +36,7 @@ export function Main() {
           {selectedChannel ? (
             <VideoPlayer selectedChannel={selectedChannel} onExitVideo={handleExitVideo} />
           ) : (
+            
             <>
               <StatusBar style='light' />
               {/* Mostrar ChannelList cuando no hay canal seleccionado */}

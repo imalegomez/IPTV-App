@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Platform, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Video } from 'expo-av';
