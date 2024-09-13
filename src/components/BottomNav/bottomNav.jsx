@@ -1,7 +1,9 @@
 // BottomNav.jsx
 import React from 'react';
-import { View, Pressable, StyleSheet } from 'react-native';
+import { View, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
+
+import styles from './styles';
 import Feather from '@expo/vector-icons/Feather';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
@@ -22,20 +24,5 @@ const BottomNav = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  navContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    backgroundColor: '#333',
-    paddingVertical: 10,
-    height: 55
-  },
-  navItem: {
-    flexDirection:'row',
-    color: '#fff',
-    fontSize: 30,
-  },
-});
 
 export default React.memo(BottomNav);

@@ -1,6 +1,6 @@
 import {useLocalSearchParams } from 'expo-router'
 
-import VideoPlayer from '../components/videoPlayer'
+import VideoPlayer from '../src/components/VideoPlayer/videoPlayer'
 //import Header from '../components/channelHeader';
 
 const ChannelScreen = () =>{

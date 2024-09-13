@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'expo-router';
-import { View, Text, FlatList, Pressable, Image, ActivityIndicator, StyleSheet, ScrollView, Platform } from 'react-native';
+import { View, Text, FlatList, Pressable, Image, ActivityIndicator, ScrollView, Platform } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import styles from './styles';
 
 const ChannelList = ({ onSelectChannel }) => {
   const [isHoveredChannel, setIsHoveredChannel] = useState(false);
@@ -68,7 +69,18 @@ const ChannelList = ({ onSelectChannel }) => {
   };
 
   const renderChannel = (channel) => (
-    <Link href={{pathname: '/channel', params: {url: channel.url, title: channel.title}}} asChild>
+    <>
+    {Platform.OS === 'web'?(
+      <Pressable 
+        onPress={() => onSelectChannel(channel)} 
+        style={styles.itemContainer}
+        >
+        {channel.logo && (
+          <Image source={{ uri: channel.logo }} style={Platform.OS === 'web' ? styles.logoWeb : styles.logo} resizeMode='contain' />
+        )}
+        <Text style={styles.channel}>{channel.title}</Text>
+      </Pressable>
+    ):(<Link href={{pathname: '/channel', params: {url: channel.url, title: channel.title}}} asChild>
     <Pressable 
       onPress={() => onSelectChannel(channel)} 
       style={styles.itemContainer}
@@ -78,7 +90,8 @@ const ChannelList = ({ onSelectChannel }) => {
       )}
       <Text style={styles.channel}>{channel.title}</Text>
     </Pressable>
-    </Link>
+    </Link>)}
+    </>
   );
 
   const handleScrollLeft = (category) => {
@@ -144,7 +157,7 @@ const ChannelList = ({ onSelectChannel }) => {
   return (
     <View style={styles.container}>
       {loading ? (
-        <ActivityIndicator size="large" color="#00ff00" style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }} />
+        <ActivityIndicator size="large" color="#000" style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }} />
       ) : error ? (
         <Text style={styles.errorText}>{error}</Text>
       ) : (
@@ -162,89 +175,6 @@ const ChannelList = ({ onSelectChannel }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  categoryContainer: {
-    marginBottom: 20,
-  },
-  horizontalContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  scrollViewContent: {
-    flexDirection: 'row',
-    flexGrow: 1,
-  },
-  channelWrapper: {
-    flex: 1,
-    margin: 10,
-  },
-  channelWrapperWeb: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    margin: 10, // Ajusta el margen según necesites
-    borderColor: 'lightgray', // Borde gris solo en web
-    width: 250, // Mantener el ancho fijo
-    height: 150, // Asegurarte que el alto sea igual al ancho para que sea cuadrada
-    borderRadius: 8,
-  },
-  scrollButton: {
-    width: 50,
-    height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  itemContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 10,
-    padding: 10,
-    borderRadius: 5,
-    width: 100,
-  },
-  logo: {
-    width: 40, // Tamaño más pequeño del logo
-    height: 40,
-    borderRadius: 5,
-    marginBottom: 5, // Espacio entre el logo y el texto
-  },
-  logoWeb: {
-    width: 30,
-    height: 30,
-    borderRadius: 5,
-    marginBottom: 5, 
-  },
-  channel: {
-    color: '#000',
-    fontSize: 14, // Ajusta el tamaño del texto si es necesario
-    textAlign: 'center',
-  },
-  categoryTitle: {
-    flexDirection: 'row',
-    left: 20,
-    color: '#000',
-    fontSize: 25,
-    marginVertical: 10,
-    fontWeight: 'bold',
-  },
-  errorText: {
-    color: 'red',
-    textAlign: 'center',
-    margin: 20,
-  },
-  categoriesList: {
-    paddingBottom: 20,
-  },
-  gridContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-  },
-});
 
 
 export default React.memo(ChannelList);

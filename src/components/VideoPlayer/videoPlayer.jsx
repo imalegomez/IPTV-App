@@ -1,51 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Platform, StyleSheet, Pressable, View } from 'react-native';
+import { Platform, Pressable, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Video } from 'expo-av';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import Hls from 'hls.js';
-import ChannelHeader from './channelHeader';
+
+
+import ChannelHeader from '../ChannelHeader/channelHeader';
+import styles from './styles'
 
 const VideoPlayer = ({ selectedChannel, onExitVideo }) => {
   const videoRef = useRef(null);
   const [showHeader, setShowHeader] = useState(false); // Estado para mostrar el Header
   const [lastInteraction, setLastInteraction] = useState(Date.now()); // Estado para registrar la última interacción
-  const hideHeaderTimeout = useRef(null); // Usar un ref para el timeout
 
-  const handleMouseMove = () => {
-    setShowHeader(true);
-    if (hideHeaderTimeout.current) {
-      clearTimeout(hideHeaderTimeout.current);
-    }
-    hideHeaderTimeout.current = setTimeout(() => {
-      setShowHeader(false);
-    }, 3000);
-  };
 
   useEffect(() => {
-    if (Platform.OS === 'web') {
-      window.addEventListener('mousemove', handleMouseMove);
-    }
-
-    return () => {
-      if (Platform.OS === 'web') {
-        window.removeEventListener('mousemove', handleMouseMove);
-        clearTimeout(hideHeaderTimeout.current);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    if (selectedChannel && Platform.OS === 'web' && videoRef.current) {
-      if (Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource(selectedChannel.url);
-        hls.attachMedia(videoRef.current);
-      } else if (videoRef.current.canPlayType('application/vnd.apple.mpegurl')) {
-        videoRef.current.src = selectedChannel.url;
-      }
-    }
-
     const lockOrientation = async () => {
       if (Platform.OS !== 'web') {
         await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
@@ -111,19 +81,5 @@ const VideoPlayer = ({ selectedChannel, onExitVideo }) => {
 
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  videoContainer: {
-    flex: 1,
-  },
-  video: {
-    alignSelf: 'center',
-    width: '100%',
-    height: '100%',
-  },
-});
 
 export default React.memo(VideoPlayer);
