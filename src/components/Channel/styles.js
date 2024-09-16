@@ -7,13 +7,15 @@ export default StyleSheet.create({
         borderRadius: 5,
         marginBottom: 5, // Espacio entre el logo y el texto
         borderRadius: 50,
-        backgroundColor: '#bbb'
+        backgroundColor: '#fff',
+        borderColor: '#000',
       },
       logoWeb: {
         width: 30,
         height: 30,
         borderRadius: 5,
-        marginBottom: 5, 
+        marginBottom: 5,
+         
       },
       itemContainer: {
         alignItems: 'center',

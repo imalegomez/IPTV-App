@@ -9,13 +9,17 @@ import BottomNav from '../BottomNav/bottomNav';
 import VideoPlayerMainScreen from '../VideoPlayerMainScreen/videoPlayerMainScreen';
 import { fetchChannels } from '../ChannelList/fetchChannels';
 
-export function Main() {
+export function Main() { // Elimina el prop 'channels' ya que se está creando en este componente
   const [selectedChannel, setSelectedChannel] = useState(null);
   const [loading, setLoading] = useState(true);
   const [channels, setChannels] = useState({});
   const [error, setError] = useState(null);
   const insets = useSafeAreaInsets();
   const [searchText, setSearchText] = useState('');
+
+  const handleSearch = (text) => {
+    setSearchText(text);
+  };
 
   // Filtrar canales según el texto de búsqueda
   const filteredChannels = Object.keys(channels).reduce((acc, category) => {
@@ -66,9 +70,9 @@ export function Main() {
     if (Platform.OS === 'web') {
       return (
         <>
-          <MainHeader />
+          <MainHeader onSearch={handleSearch} />
           <VideoPlayerMainScreen selectedChannel={selectedChannel || { url: '', title: 'Default Video' }} />
-          <ChannelList channels={channels} onSelectChannel={handleSelectChannel} />
+          <ChannelList channels={filteredChannels} onSelectChannel={handleSelectChannel} />
         </>
       );
     }
@@ -77,13 +81,13 @@ export function Main() {
       <VideoPlayer selectedChannel={selectedChannel} onExitVideo={handleExitVideo} />
     ) : (
       <>
-        <MainHeader/>
+        <MainHeader onSearch={handleSearch} /> {/* Asegúrate de pasar onSearch aquí también */}
         <StatusBar style='light' />
-        <ChannelList channels={channels} onSelectChannel={handleSelectChannel} />
+        <ChannelList channels={filteredChannels} onSelectChannel={handleSelectChannel} /> {/* Usa filteredChannels */}
         <BottomNav />
       </>
     );
-  }, [loading, error, selectedChannel, channels]);
+  }, [loading, error, selectedChannel, filteredChannels]); // Asegúrate de incluir filteredChannels aquí
 
   return (
     <View style={{ paddingTop: insets.top, paddingBottom: insets.bottom, flex: 1 }}>

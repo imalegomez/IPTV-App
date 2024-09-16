@@ -5,8 +5,7 @@ import VideoPlayer from '../src/components/VideoPlayer/videoPlayer'
 
 const ChannelScreen = () =>{
     const {url, title} = useLocalSearchParams();
-
-
+    
     return(
         <>
             <VideoPlayer selectedChannel={{url, title}}/>

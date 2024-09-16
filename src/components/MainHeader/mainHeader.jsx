@@ -4,27 +4,36 @@ import { Link } from "expo-router";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Feather from '@expo/vector-icons/Feather';
 import styles from "./styles";
+import SearchBar from "../SearchBar/searchBar"; // Asegúrate de que la ruta sea correcta
 
-const MainHeader = () => {
+const MainHeader = ({ onSearch }) => { // Recibe la función onSearch como prop
   const [isHoveredHome, setIsHoveredHome] = useState(false);
   const [isHoveredLiveTV, setIsHoveredLiveTV] = useState(false);
+  const [searchText, setSearchText] = useState('');
+
+  const handleSearch = (text) => {
+    setSearchText(text);
+    if (onSearch) {
+      onSearch(text); // Llama a la función onSearch pasada como prop
+    }
+  };
 
   return (
     <View style={Platform.OS === 'web' ? styles.headerContainerWeb : styles.headerContainerMobile}>
       {(Platform.OS === 'web') && (
         <View style={styles.leftContainer}>
-          <Link href={{pathname: '/'}}>
-          <Pressable 
-            onMouseEnter={() => setIsHoveredHome(true)}
-            onMouseLeave={() => setIsHoveredHome(false)}
-            style={[
-              styles.navButton,
-              isHoveredHome && styles.navButtonHovered
-            ]}
-          >
-            <Feather name="home" size={20} color="white" />
-            <Text style={styles.navText}>Home</Text>
-          </Pressable>
+          <Link href={{ pathname: '/' }}>
+            <Pressable 
+              onMouseEnter={() => setIsHoveredHome(true)}
+              onMouseLeave={() => setIsHoveredHome(false)}
+              style={[
+                styles.navButton,
+                isHoveredHome && styles.navButtonHovered
+              ]}
+            >
+              <Feather name="home" size={20} color="white" />
+              <Text style={styles.navText}>Home</Text>
+            </Pressable>
           </Link>
           <Pressable 
             onMouseEnter={() => setIsHoveredLiveTV(true)}
@@ -37,6 +46,8 @@ const MainHeader = () => {
             <Feather name="tv" size={20} color="white" />
             <Text style={styles.navText}>Live TV</Text>
           </Pressable>
+
+          <SearchBar searchText={searchText} onSearch={handleSearch} /> {/* Pasa la función handleSearch */}
         </View>
       )}
       {(Platform.OS === 'web') && (
@@ -45,14 +56,12 @@ const MainHeader = () => {
         </Pressable>
       )}
       {
-        (Platform.OS !=='web') && (
+        (Platform.OS !== 'web') && (
           <Text style={styles.headerText}>D'Sol TV</Text>
         )
       }
     </View>
   );
 }
-
-
 
 export default React.memo(MainHeader);

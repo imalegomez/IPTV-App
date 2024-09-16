@@ -20,7 +20,7 @@ const ChannelList = ({ channels, onSelectChannel }) => {
 
   return (
     <View style={styles.container}>
-      {Platform.OS === 'web' && <SearchBar searchText={searchText} onSearch={setSearchText} />} 
+
       {searchText && Object.keys(filteredChannels).length === 0 ? (
         <Text style={styles.errorText}>No se encontraron canales.</Text>
       ) : (
