@@ -2,10 +2,12 @@ import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
     logo: {
-        width: 60, // Tamaño más pequeño del logo
-        height: 60,
+        width: 100, // Tamaño más pequeño del logo
+        height: 100,
         borderRadius: 5,
         marginBottom: 5, // Espacio entre el logo y el texto
+        borderRadius: 50,
+        backgroundColor: '#bbb'
       },
       logoWeb: {
         width: 30,

@@ -5,15 +5,11 @@ import { useRouter } from 'expo-router';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import styles from './styles';
 
-const ChannelHeader = ({ title, onExit }) => {
+const ChannelHeader = ({ title }) => {
     const router = useRouter();
 
     const handleBackPress = useCallback(() => {
-        if (onExit) {
-            onExit(); // Llama a la función de salida
-        } else {
-            router.back(); // Cambia a la ruta del índice si no se proporciona onExit
-        }
+        router.push('/'); // Cambia a la ruta del índice si no se proporciona onExit
     }, []);
 
     return (

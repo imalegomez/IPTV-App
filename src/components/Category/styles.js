@@ -27,7 +27,11 @@ export default StyleSheet.create({
         borderColor: 'lightgray', // Borde gris solo en web
         width: 250, // Mantener el ancho fijo
         height: 150, // Asegurarte que el alto sea igual al ancho para que sea cuadrada
-        borderRadius: 8,
+        borderRadius: 15,
+        borderColor: '#dee2e6',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.4,
+        shadowRadius: 4,
       },
       categoryContainer: {
         marginBottom: 20,

@@ -4,13 +4,13 @@ export default StyleSheet.create({
     navContainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        backgroundColor: '#333',
-        paddingVertical: 10,
-        height: 55
+        backgroundColor: '#f4f4f5',
+        paddingVertical: 20,
+        height: 75
       },
       navItem: {
         flexDirection:'row',
-        color: '#fff',
+        color: '#000',
         fontSize: 30,
       },
 })

@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
     headerContainerMobile: {
-      backgroundColor: 'rgba(51, 51, 51, 0.8)',
+      backgroundColor: '#fff',
       padding: 20,
       flexDirection: 'row',
       alignItems: 'center',
@@ -10,7 +10,7 @@ export default StyleSheet.create({
       height: 75,
     },
     headerContainerWeb: {
-      backgroundColor: '#000',
+      backgroundColor: '#0f0f0f',
       padding: 20,
       flexDirection: 'row',
       alignItems: 'center',
@@ -38,7 +38,7 @@ export default StyleSheet.create({
       marginLeft: 5,  // Espacio entre el ícono y el texto
     },
     headerText: {
-      color: '#fff',
+      color: '#000',
       fontSize: 24,
       fontWeight: 'bold',
       textAlign: 'center',

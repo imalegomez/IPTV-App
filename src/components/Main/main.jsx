@@ -15,6 +15,18 @@ export function Main() {
   const [channels, setChannels] = useState({});
   const [error, setError] = useState(null);
   const insets = useSafeAreaInsets();
+  const [searchText, setSearchText] = useState('');
+
+  // Filtrar canales según el texto de búsqueda
+  const filteredChannels = Object.keys(channels).reduce((acc, category) => {
+    const filtered = channels[category].filter(channel =>
+      channel.title.toLowerCase().includes(searchText.toLowerCase())
+    );
+    if (filtered.length > 0) {
+      acc[category] = filtered;
+    }
+    return acc;
+  }, {});
 
   const loadChannels = useCallback(async () => {
     setLoading(true);
@@ -42,7 +54,7 @@ export function Main() {
     setSelectedChannel(null);
   }, []);
 
-  const renderContent = () => {
+  const renderContent = useCallback(() => {
     if (loading) {
       return <ActivityIndicator size="large" color="#fff" style={{ flex: 1 }} />;
     }
@@ -65,16 +77,17 @@ export function Main() {
       <VideoPlayer selectedChannel={selectedChannel} onExitVideo={handleExitVideo} />
     ) : (
       <>
+        <MainHeader/>
         <StatusBar style='light' />
         <ChannelList channels={channels} onSelectChannel={handleSelectChannel} />
+        <BottomNav />
       </>
     );
-  };
+  }, [loading, error, selectedChannel, channels]);
 
   return (
     <View style={{ paddingTop: insets.top, paddingBottom: insets.bottom, flex: 1 }}>
       {renderContent()}
-      {Platform.OS !== 'web' && !selectedChannel && <BottomNav />}
     </View>
   );
 }
