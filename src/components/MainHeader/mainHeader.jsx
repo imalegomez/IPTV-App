@@ -35,6 +35,7 @@ const MainHeader = ({ onSearch }) => { // Recibe la función onSearch como prop
               <Text style={styles.navText}>Home</Text>
             </Pressable>
           </Link>
+          <Link href={{ pathname : '/liveTv'}}>
           <Pressable 
             onMouseEnter={() => setIsHoveredLiveTV(true)}
             onMouseLeave={() => setIsHoveredLiveTV(false)}
@@ -46,7 +47,7 @@ const MainHeader = ({ onSearch }) => { // Recibe la función onSearch como prop
             <Feather name="tv" size={20} color="white" />
             <Text style={styles.navText}>Live TV</Text>
           </Pressable>
-
+          </Link>
           <SearchBar searchText={searchText} onSearch={handleSearch} /> {/* Pasa la función handleSearch */}
         </View>
       )}
