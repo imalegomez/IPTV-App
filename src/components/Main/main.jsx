@@ -81,9 +81,9 @@ export function Main() { // Elimina el prop 'channels' ya que se está creando e
       <VideoPlayer selectedChannel={selectedChannel} onExitVideo={handleExitVideo} />
     ) : (
       <>
-        <MainHeader onSearch={handleSearch} /> {/* Asegúrate de pasar onSearch aquí también */}
+        <MainHeader onSearch={handleSearch} /> 
         <StatusBar style='light' />
-        <ChannelList channels={filteredChannels} onSelectChannel={handleSelectChannel} /> {/* Usa filteredChannels */}
+        <ChannelList channels={filteredChannels} onSelectChannel={handleSelectChannel} /> 
         <BottomNav />
       </>
     );

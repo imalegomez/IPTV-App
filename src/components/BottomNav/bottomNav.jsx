@@ -15,7 +15,7 @@ const BottomNav = () => {
       <Pressable onPress={() => router.push('/')}>
         <Feather name="home" style={styles.navItem}/>
       </Pressable>
-      <Pressable onPress={() => router.push('/search')}>
+      <Pressable onPress={() => router.push('/liveTv')}>
         <Feather name="compass" style={styles.navItem} />
       </Pressable>
       <Pressable onPress={() => router.push('/bookmark')}>
