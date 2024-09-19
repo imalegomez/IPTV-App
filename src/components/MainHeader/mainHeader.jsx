@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, Pressable, Platform } from "react-native";
 import { Link } from "expo-router";
-import AntDesign from '@expo/vector-icons/AntDesign';
-import Feather from '@expo/vector-icons/Feather';
+import {AntDesign, Feather} from '@expo/vector-icons';
 import styles from "./styles";
 import SearchBar from "../SearchBar/searchBar"; // Asegúrate de que la ruta sea correcta
 

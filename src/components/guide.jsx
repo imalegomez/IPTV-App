@@ -143,7 +143,7 @@ const Guide = () => {
 
   const fetchData = useCallback(async () => {
     try {
-      const response = await fetch('http://192.168.1.39:8000/archivo.json');
+      const response = await fetch('http://192.168.77.4:8000/archivo.json');
       const json = await response.json();
       
       json.tv.programme = json.tv.programme.map(program => ({
@@ -249,22 +249,22 @@ const Guide = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#000000',
   },
   navigationControls: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 10,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: '#222222',
   },
   navButton: {
     padding: 10,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#333333',
     borderRadius: 5,
   },
   timeHeaderContainer: {
     flexDirection: 'row',
-    backgroundColor: '#e0e0e0',
+    backgroundColor: '#222222',
   },
   timeHeader: {
     flexDirection: 'row',
@@ -273,49 +273,54 @@ const styles = StyleSheet.create({
   hourCell: {
     justifyContent: 'center',
     alignItems: 'center',
+    borderRightWidth: 1,
+    borderRightColor: '#444444',
   },
   hourText: {
     fontSize: 12,
     fontWeight: 'bold',
+    color: '#ffffff',
   },
   channelRow: {
     flexDirection: 'row',
-    height: 100,
+    height: 80,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: '#333333',
   },
   channelInfo: {
     width: CHANNEL_WIDTH,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#222222',
     padding: 5,
   },
   channelName: {
     fontWeight: 'bold',
     fontSize: 12,
+    color: '#ffffff',
     textAlign: 'center',
   },
   programItem: {
     padding: 5,
     borderRightWidth: 1,
-    borderRightColor: '#e0e0e0',
+    borderRightColor: '#333333',
     justifyContent: 'space-between',
     position: 'absolute',
     height: '100%',
-    backgroundColor: '#ffffff',
+    backgroundColor: '#111111',
   },
   programTitle: {
     fontWeight: 'bold',
     fontSize: 12,
+    color: '#ffffff',
   },
   programTime: {
     fontSize: 10,
-    color: '#666',
+    color: '#888888',
   },
   progressBarContainer: {
     height: 4,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: '#333333',
     borderRadius: 2,
     overflow: 'hidden',
     marginTop: 2,
@@ -324,16 +329,16 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   liveProgram: {
-    backgroundColor: '#ffd700',
+    backgroundColor: '#444444',
   },
   pastProgram: {
-    opacity: 0.7,
+    opacity: 0.5,
   },
   liveText: {
-    color: 'red',
+    color: '#ff0000',
     fontWeight: 'bold',
     fontSize: 10,
   },
-})
+});
 
 export default React.memo(Guide);

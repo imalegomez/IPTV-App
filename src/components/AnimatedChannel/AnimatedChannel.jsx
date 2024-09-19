@@ -1,46 +1,38 @@
 import React, { useEffect, useRef, useMemo } from 'react';
-import { Animated, Easing, Platform, View, Text } from 'react-native';
+import { Animated, Easing, Platform } from 'react-native';
 import Category from '../Category/Category';
 
 const AnimatedChannel = React.memo(({ category, channels, onSelectChannel }) => {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const translateY = useRef(new Animated.Value(20)).current;
-  const scale = useRef(new Animated.Value(0.9)).current; // Agregar escala
+  const animationConfig = useRef({
+    fadeAnim: new Animated.Value(0),
+    translateY: new Animated.Value(20),
+    scale: new Animated.Value(0.9)
+  }).current;
 
   const animatedStyle = useMemo(() => ({
-    opacity: fadeAnim,
+    opacity: animationConfig.fadeAnim,
     transform: [
-      { translateY },
-      { scale } // Añadir transformación de escala
+      { translateY: animationConfig.translateY },
+      { scale: animationConfig.scale }
     ]
-  }), [fadeAnim, translateY, scale]);
+  }), [animationConfig]);
 
   useEffect(() => {
-    const animation = Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 700, // Aumentar la duración para mayor suavidad
-        easing: Easing.out(Easing.ease),
-        useNativeDriver: true,
-      }),
-      Animated.timing(translateY, {
-        toValue: 0,
-        duration: 700, // Aumentar la duración para mayor suavidad
-        easing: Easing.out(Easing.ease),
-        useNativeDriver: true,
-      }),
-      Animated.timing(scale, {
-        toValue: 1, // Hacer que la escala vuelva a 1
-        duration: 700,
-        easing: Easing.out(Easing.ease),
-        useNativeDriver: true,
-      }),
-    ]);
+    const animation = Animated.parallel(
+      Object.entries(animationConfig).map(([key, value]) =>
+        Animated.timing(value, {
+          toValue: key === 'translateY' ? 0 : 1,
+          duration: 700,
+          easing: Easing.out(Easing.ease),
+          useNativeDriver: true,
+        })
+      )
+    );
 
     animation.start();
 
     return () => animation.stop();
-  }, [fadeAnim, translateY, scale]);
+  }, [animationConfig]);
 
   return (
     <Animated.View style={[animatedStyle, styles.container]}>
@@ -57,17 +49,21 @@ const styles = {
     padding: 10,
     backgroundColor: '#f2f2f2',
     borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 5, // Añadir sombra para Android y web
-    ...(Platform.OS === 'web' && {
-      transition: 'all 0.3s ease-in-out', // Para transiciones suaves en web
-      cursor: 'pointer', // Añadir puntero en PC para mejorar la UX
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 5,
+      },
+      web: {
+        boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.3)',
+        transition: 'all 0.3s ease-in-out',
+        cursor: 'pointer',
+      },
     }),
   },
 };
