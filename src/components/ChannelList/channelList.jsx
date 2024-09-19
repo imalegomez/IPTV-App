@@ -1,39 +1,45 @@
-import React, { useState } from 'react';
-import { View, FlatList, Text, Platform } from 'react-native';
+import React, { useState, useCallback, useMemo } from 'react';
+import { View, FlatList, Text } from 'react-native';
 import AnimatedChannel from '../AnimatedChannel/AnimatedChannel';
-import SearchBar from '../SearchBar/searchBar'; // Importa el componente SearchBar
+import SearchBar from '../SearchBar/searchBar';
 import styles from './styles';
 
 const ChannelList = ({ channels, onSelectChannel }) => {
-  const [searchText, setSearchText] = useState(''); // Estado para el texto de búsqueda
+  const [searchText, setSearchText] = useState('');
 
-  // Filtrar canales según el texto de búsqueda
-  const filteredChannels = Object.keys(channels).reduce((acc, category) => {
-    const filtered = channels[category].filter(channel =>
-      channel.title.toLowerCase().includes(searchText.toLowerCase())
-    );
-    if (filtered.length > 0) {
-      acc[category] = filtered;
-    }
-    return acc;
-  }, {});
+  const filteredChannels = useMemo(() => {
+    if (!searchText) return channels;
+    return Object.entries(channels).reduce((acc, [category, categoryChannels]) => {
+      const filtered = categoryChannels.filter(channel =>
+        channel.title.toLowerCase().includes(searchText.toLowerCase())
+      );
+      if (filtered.length > 0) {
+        acc[category] = filtered;
+      }
+      return acc;
+    }, {});
+  }, [channels, searchText]);
+
+  const renderItem = useCallback(({ item }) => (
+    <AnimatedChannel
+      category={item}
+      channels={filteredChannels[item]}
+      onSelectChannel={onSelectChannel}
+    />
+  ), [filteredChannels, onSelectChannel]);
+
+  const keyExtractor = useCallback((item) => item, []);
 
   return (
     <View style={styles.container}>
-
-      {searchText && Object.keys(filteredChannels).length === 0 ? (
+      <SearchBar value={searchText} onChangeText={setSearchText} />
+      {Object.keys(filteredChannels).length === 0 ? (
         <Text style={styles.errorText}>No se encontraron canales.</Text>
       ) : (
         <FlatList
           data={Object.keys(filteredChannels)}
-          keyExtractor={(item) => item}
-          renderItem={({ item }) => (
-            <AnimatedChannel
-              category={item}
-              channels={filteredChannels[item]} // Utiliza los canales filtrados
-              onSelectChannel={onSelectChannel}
-            />
-          )}
+          keyExtractor={keyExtractor}
+          renderItem={renderItem}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.categoriesList}
         />

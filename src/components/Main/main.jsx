@@ -1,36 +1,21 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import VideoPlayer from '../VideoPlayer/videoPlayer';
-import ChannelList from '../ChannelList/channelList';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { Platform, View, ActivityIndicator, Text } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Platform, View, ActivityIndicator, Text } from 'react-native';
+import VideoPlayer from '../VideoPlayer/videoPlayer';
+import ChannelList from '../ChannelList/channelList';
 import MainHeader from '../MainHeader/mainHeader';
 import BottomNav from '../BottomNav/bottomNav';
 import VideoPlayerMainScreen from '../VideoPlayerMainScreen/videoPlayerMainScreen';
 import { fetchChannels } from '../ChannelList/fetchChannels';
 
-export function Main() { // Elimina el prop 'channels' ya que se está creando en este componente
+export function Main() {
   const [selectedChannel, setSelectedChannel] = useState(null);
   const [loading, setLoading] = useState(true);
   const [channels, setChannels] = useState({});
   const [error, setError] = useState(null);
-  const insets = useSafeAreaInsets();
   const [searchText, setSearchText] = useState('');
-
-  const handleSearch = (text) => {
-    setSearchText(text);
-  };
-
-  // Filtrar canales según el texto de búsqueda
-  const filteredChannels = Object.keys(channels).reduce((acc, category) => {
-    const filtered = channels[category].filter(channel =>
-      channel.title.toLowerCase().includes(searchText.toLowerCase())
-    );
-    if (filtered.length > 0) {
-      acc[category] = filtered;
-    }
-    return acc;
-  }, {});
+  const insets = useSafeAreaInsets();
 
   const loadChannels = useCallback(async () => {
     setLoading(true);
@@ -50,12 +35,29 @@ export function Main() { // Elimina el prop 'channels' ya que se está creando e
     loadChannels();
   }, [loadChannels]);
 
+  const filteredChannels = useMemo(() => {
+    if (!searchText) return channels;
+    return Object.entries(channels).reduce((acc, [category, categoryChannels]) => {
+      const filtered = categoryChannels.filter(channel =>
+        channel.title.toLowerCase().includes(searchText.toLowerCase())
+      );
+      if (filtered.length > 0) {
+        acc[category] = filtered;
+      }
+      return acc;
+    }, {});
+  }, [channels, searchText]);
+
   const handleSelectChannel = useCallback((channel) => {
     setSelectedChannel(channel);
   }, []);
 
   const handleExitVideo = useCallback(() => {
     setSelectedChannel(null);
+  }, []);
+
+  const handleSearch = useCallback((text) => {
+    setSearchText(text);
   }, []);
 
   const renderContent = useCallback(() => {
@@ -87,7 +89,7 @@ export function Main() { // Elimina el prop 'channels' ya que se está creando e
         <BottomNav />
       </>
     );
-  }, [loading, error, selectedChannel, filteredChannels]); // Asegúrate de incluir filteredChannels aquí
+  }, [loading, error, selectedChannel, filteredChannels, handleSearch, handleExitVideo, handleSelectChannel]);
 
   return (
     <View style={{ paddingTop: insets.top, paddingBottom: insets.bottom, flex: 1 }}>

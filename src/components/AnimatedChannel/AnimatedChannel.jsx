@@ -1,35 +1,44 @@
-// AnimatedChannel.jsx
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 import { Animated, Easing } from 'react-native';
 import Category from '../Category/Category';
 
-const AnimatedChannel = ({ category, channels, onSelectChannel }) => {
-  const fadeAnim = useRef(new Animated.Value(0)).current; // Valor inicial para la animación
-  const translateY = new Animated.Value(20); // Valor inicial para el movimiento en Y
+const AnimatedChannel = React.memo(({ category, channels, onSelectChannel }) => {
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const translateY = useRef(new Animated.Value(20)).current;
+
+  const animatedStyle = useMemo(() => ({
+    opacity: fadeAnim,
+    transform: [{ translateY }]
+  }), [fadeAnim, translateY]);
 
   useEffect(() => {
-    // Animar desvanecimiento y movimiento cuando el componente se monta
-    Animated.parallel([
+    const animation = Animated.parallel([
       Animated.timing(fadeAnim, {
-        toValue: 1, // Cambiar a opacidad total
-        duration: 500, // Duración de la animación
-        easing: Easing.out(Easing.ease), 
+        toValue: 1,
+        duration: 500,
+        easing: Easing.out(Easing.ease),
         useNativeDriver: true,
       }),
       Animated.timing(translateY, {
-        toValue: 0, // Volver a la posición original
+        toValue: 0,
         duration: 500,
-        easing: Easing.out(Easing.ease), // Ajustar la curva de animación
+        easing: Easing.out(Easing.ease),
         useNativeDriver: true,
       }),
-    ]).start();
-  }, []);
+    ]);
+
+    animation.start();
+
+    return () => animation.stop();
+  }, [fadeAnim, translateY]);
 
   return (
-    <Animated.View style={{ opacity: fadeAnim, transform:[{translateY}] }}>
+    <Animated.View style={animatedStyle}>
       <Category category={category} channels={channels} onSelectChannel={onSelectChannel} />
     </Animated.View>
   );
-};
+});
 
-export default React.memo(AnimatedChannel);
+AnimatedChannel.displayName = 'AnimatedChannel';
+
+export default AnimatedChannel;

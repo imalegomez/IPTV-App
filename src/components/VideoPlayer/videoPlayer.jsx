@@ -1,16 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Platform, Pressable, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Video } from 'expo-av';
 import * as ScreenOrientation from 'expo-screen-orientation';
-import { useRouter } from 'expo-router';
 import ChannelHeader from '../ChannelHeader/channelHeader';
 import styles from './styles';
 
 const VideoPlayer = ({ selectedChannel, onExitVideo }) => {
   const videoRef = useRef(null);
   const [showHeader, setShowHeader] = useState(false);
-  const [lastInteraction, setLastInteraction] = useState(Date.now());
+  const lastInteractionRef = useRef(Date.now());
 
   useEffect(() => {
     const lockOrientation = async () => {
@@ -21,36 +20,39 @@ const VideoPlayer = ({ selectedChannel, onExitVideo }) => {
     lockOrientation();
 
     return () => {
-      const unlockOrientation = async () => {
-        if (Platform.OS !== 'web') {
-          await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
-        }
-      };
-      unlockOrientation();
+      if (Platform.OS !== 'web') {
+        ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+      }
     };
-  }, [selectedChannel]);
+  }, []);
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (Date.now() - lastInteraction > 3000) {
+    const hideHeaderTimeout = setInterval(() => {
+      if (Date.now() - lastInteractionRef.current > 3000) {
         setShowHeader(false);
       }
     }, 3000);
 
-    return () => clearTimeout(timeout);
-  }, [lastInteraction]);
+    return () => clearInterval(hideHeaderTimeout);
+  }, []);
 
-  const handleScreenTap = () => {
+  const handleScreenTap = useCallback(() => {
     setShowHeader(true);
-    setLastInteraction(Date.now());
-  };
+    lastInteractionRef.current = Date.now();
+  }, []);
+
+  const handleFullscreenUpdate = useCallback(({ fullscreenUpdate }) => {
+    if (fullscreenUpdate === Video.FULLSCREEN_UPDATE_PLAYER_WILL_DISMISS) {
+      onExitVideo();
+    }
+  }, [onExitVideo]);
 
   return (
     <Pressable onPress={handleScreenTap} style={styles.container}>
       {showHeader && (
         <ChannelHeader
-          title={typeof selectedChannel?.title === 'string' ? selectedChannel.title : "Sin título"}
-          onExit={onExitVideo} // Pasa la función aquí
+          title={selectedChannel?.title || "Sin título"}
+          onExit={onExitVideo}
         />
       )}
       <View style={styles.videoContainer}>
@@ -68,11 +70,7 @@ const VideoPlayer = ({ selectedChannel, onExitVideo }) => {
               resizeMode="stretch"
               shouldPlay
               style={styles.video}
-              onFullscreenUpdate={({ fullscreenUpdate }) => {
-                if (fullscreenUpdate === Video.FULLSCREEN_UPDATE_PLAYER_WILL_DISMISS) {
-                  onExitVideo(); // Llama a la función de salida
-                }
-              }}
+              onFullscreenUpdate={handleFullscreenUpdate}
             />
           </>
         )}
