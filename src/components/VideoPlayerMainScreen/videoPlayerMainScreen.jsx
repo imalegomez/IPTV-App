@@ -1,34 +1,41 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Platform, View } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
-import { Video } from 'expo-av';
 import Hls from 'hls.js';
 
 import styles from './styles';
 
-const VideoPlayerMainScreen = ({ selectedChannel, onExitVideo }) => {
+const VideoPlayerMainScreen = React.memo(({ selectedChannel }) => {
   const videoRef = useRef(null);
-  //const [showHeader, setShowHeader] = useState(false); // Estado para mostrar el Header
-  //const hideHeaderTimeout = useRef(null); // Usar un ref para el timeout
 
   useEffect(() => {
-    if (selectedChannel && Platform.OS === 'web' && videoRef.current) {
-      if (Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource(selectedChannel.url);
-        hls.attachMedia(videoRef.current);
-      } else if (videoRef.current.canPlayType('application/vnd.apple.mpegurl')) {
-        videoRef.current.src = selectedChannel.url;
+    if (!selectedChannel || Platform.OS !== 'web' || !videoRef.current) return;
+
+    const video = videoRef.current;
+
+    if (Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(selectedChannel.url);
+      hls.attachMedia(video);
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = selectedChannel.url;
+    }
+
+    return () => {
+      if (video) {
+        video.pause();
+        video.src = '';
+        video.load();
       }
-    }})
+    };
+  }, [selectedChannel]);
 
-
-  return(
-  <View style={styles.videoContainer}>
+  return (
+    <View style={styles.videoContainer}>
       <video ref={videoRef} style={styles.video} controls autoPlay />
-  </View>
-
+    </View>
   );
-};
+});
 
-export default React.memo(VideoPlayerMainScreen);
+VideoPlayerMainScreen.displayName = 'VideoPlayerMainScreen';
+
+export default VideoPlayerMainScreen;
