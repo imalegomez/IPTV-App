@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, TextInput } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import styles from './styles'; // Asegúrate de que las estilos están disponibles
+import styles from './styles'; 
 
 const SearchBar = ({ searchText, onSearch }) => {
   return (

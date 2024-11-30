@@ -3,7 +3,7 @@ import { View, Text, Pressable, Platform } from "react-native";
 import { Link } from "expo-router";
 import {AntDesign, Feather} from '@expo/vector-icons';
 import styles from "./styles";
-import SearchBar from "../SearchBar/searchBar"; // Asegúrate de que la ruta sea correcta
+import SearchBar from "../SearchBar/searchBar"; 
 
 const MainHeader = ({ onSearch }) => { // Recibe la función onSearch como prop
   const [isHoveredHome, setIsHoveredHome] = useState(false);

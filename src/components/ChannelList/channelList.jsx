@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { View, FlatList, Text } from 'react-native';
 import AnimatedChannel from '../AnimatedChannel/AnimatedChannel';
-import SearchBar from '../SearchBar/searchBar';
 import styles from './styles';
 
 const ChannelList = ({ channels, onSelectChannel }) => {
@@ -32,7 +31,6 @@ const ChannelList = ({ channels, onSelectChannel }) => {
 
   return (
     <View style={styles.container}>
-      <SearchBar value={searchText} onChangeText={setSearchText} />
       {Object.keys(filteredChannels).length === 0 ? (
         <Text style={styles.errorText}>No se encontraron canales.</Text>
       ) : (
